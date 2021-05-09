@@ -8,6 +8,23 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
+  final _formKey = GlobalKey<FormState>();
+  String _userEmail = '';
+  String _userName = '';
+  String _userPassword = '';
+
+  void _trySubmit(){
+    final isValid = _formKey.currentState.validate();
+    // close keyboard
+    FocusScope.of(context).unfocus();
+
+    if(isValid){
+      // trigger the onSave inside formFields
+      _formKey.currentState.save();
+      print(_userName);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -17,25 +34,59 @@ class _AuthFormState extends State<AuthForm> {
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextFormField(
+                    validator: (value){
+                      if(value.isEmpty || !value.contains('@')){
+                        return 'Please return a valid email';
+                      }else{
+                        return null;
+                      }
+                    },
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email Address'
                     ),
+                    onSaved: (value){
+                      // no need for set state : no need to refresh the screen
+                      _userEmail = value;
+                    },
                   ),
                   TextFormField(
+                    validator: (value){
+                      if(value.isEmpty){
+                        return 'Username require.';
+                      }else{
+                        return null;
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: 'Username'
                     ),
+                    onSaved: (value){
+                      // no need for set state : no need to refresh the screen
+                      _userName = value;
+                    },
                   ),
                   TextFormField(
+                    validator: (value){
+                      if(value.isEmpty || value.length < 8){
+                        return 'Password must be at least 7 characters.';
+                      }else{
+                        return null;
+                      }
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password'
                     ),
+                    onSaved: (value){
+                      // no need for set state : no need to refresh the screen
+                      _userPassword = value;
+                    },
                   ),
                   SizedBox(
                     height: 12,
@@ -45,9 +96,7 @@ class _AuthFormState extends State<AuthForm> {
                     //
                     // ),
                     child: Text('LOGIN'),
-                    onPressed: (){
-
-                    },
+                    onPressed: _trySubmit,
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
