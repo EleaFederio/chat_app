@@ -32,7 +32,7 @@ class ChatScreen extends StatelessWidget {
           FirebaseFirestore.instance
               .collection('chats/yGcYYHnVCHohMeGyEhcc/messages')
               .add({
-                'text' : 'another text there'
+                'text' : 'another text again'
               });
         },
       ),
