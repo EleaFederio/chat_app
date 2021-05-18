@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 class MessageBubble extends StatelessWidget {
 
   final String message;
-  final String userId;
+  final String username;
   final bool isMe;
   final Key key;
 
-  MessageBubble(this.message, this.userId, this.isMe, {this.key});
+  MessageBubble(this.message, this.username, this.isMe, {this.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +39,11 @@ class MessageBubble extends StatelessWidget {
           ),
           child: Column(
             children: [
-              FutureBuilder(
-                future: user.doc(userId).get(),
-                builder: (context, userSnapshot){
-                  if(userSnapshot.connectionState == ConnectionState.waiting){
-                    return Text('waiting...');
-                  }
-                  return Text(
-                    userSnapshot.data['username'],
-                    style: TextStyle(
-                        color: isMe ? Colors.black : Theme.of(context).accentTextTheme.title.color
-                    ),
-                  );
-                },
+              Text(
+                username,
+                style: TextStyle(
+                    color: isMe ? Colors.black : Theme.of(context).accentTextTheme.title.color
+                ),
               ),
               Text(
                 message,
