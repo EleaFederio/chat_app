@@ -39,6 +39,7 @@ class _AuthScreenState extends State<AuthScreen> {
             password: password
         );
       }else{
+        print('Email: $email === Password $password\n');
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email,
             password: password
