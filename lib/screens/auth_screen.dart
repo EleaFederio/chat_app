@@ -55,6 +55,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_image')
             .child('$profilePicName.jpg');
         await ref.putFile(image);
+        final url = await ref.getDownloadURL();
 
         //  Add other User Details
         await FirebaseFirestore.instance
@@ -62,6 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
         .doc(authResult.user.uid)
         .set({
           'username' : username,
+          'profile_pic_url' : url
         });
       }
 
