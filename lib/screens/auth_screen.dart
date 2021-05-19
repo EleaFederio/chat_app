@@ -1,7 +1,10 @@
 
+import 'dart:io';
+
 import 'package:chat_app/widgets/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +29,7 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  void _submitAuthForm(String email, String username, String password, bool isLogin, BuildContext ctx) async {
+  void _submitAuthForm(String email, String username, String password, File image, bool isLogin, BuildContext ctx) async {
     UserCredential authResult;
 
     try{
@@ -44,6 +47,15 @@ class _AuthScreenState extends State<AuthScreen> {
             email: email,
             password: password
         );
+
+        //Upload Image
+        String profilePicName = authResult.user.uid;
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child('$profilePicName.jpg');
+        await ref.putFile(image);
+
         //  Add other User Details
         await FirebaseFirestore.instance
         .collection('users')
